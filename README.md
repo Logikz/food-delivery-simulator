@@ -1,41 +1,53 @@
-# Project Template
+# CS665 Summer 2018 Assignment 2
 
-This is a Java Maven Project Template
+This is assignment 2 for CS665 Summer 2018.  The following readme can be used to guide the user 
+to install and run the application using Java.  
+
+-Nick Cuneo
 
 
+# Program Assumptions
 
-# How to compile the project
+TBD
 
-We use Apache Maven to compile and run this project. 
+# Implementation Description
 
-You need to install Apache Maven (https://maven.apache.org/)  on your system. 
 
-Type on the command line: 
+# Setup
+ 
+You need to install Apache Maven (https://maven.apache.org/)  on your system.
 
+# Compilation 
+
+Compilation and packaging is done with maven, and is easily ran from windows or linux with one of
+the following scripts.
+
+## Windows
 ```bash
-mvn clean compile
+compile.bat
 ```
 
-# How to create a binary runable package 
-
+## Linux
 
 ```bash
-mvn clean compile assembly:single
+./compile.sh
 ```
 
 
-# How to run
+# Running
 
+The application can be ran by executing one of the following scripts on windows or linux.
+
+## Windows
 
 ```bash
-java -classpath target/Example-1-1.0-SNAPSHOT-jar-with-dependencies.jar edu.bu.met.cs665.Main
+run.bat
 ```
 
-or
-
+## Linux
 
 ```bash
-run.sh 
+./run.sh 
 ```
 
 # Using Findbugs 
@@ -58,35 +70,20 @@ mvn findbugs:findbugs
 
 # Run Checkstyle 
 
-CheckStyle code styling configuration files are in config/ directory. Maven checkstyle plugin is set to use google code style. You can change it to other styles like sun checkstyle. 
-
 To analyse this example using CheckStyle run 
 
 ```bash
 mvn checkstyle:check
 ```
 
-This will generate a report in XML format
 
+CheckStyle code styling configuration files are in config/ directory. Maven checkstyle plugin is set to use google code style. You can change it to other styles like sun checkstyle. 
 
-```bash
-target/checkstyle-checker.xml
-target/checkstyle-result.xml
-```
+# Unit Tests
 
-and the folliowing command will generate a report in HTML format that you can open it using a Web browser. 
-
-```bash
-mvn checkstyle:checkstyle
-```
-
-```bash
-target/site/checkstyle.html
-```
-
-
-
-
+A sampling of unit tests are included to show functionality and to illustrate the design patterns
+ability to make testing easier.  The tests themselves are by no means complete nor offer full coverage
+of the assignment as it was not requested.
 
 
 

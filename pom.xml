@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>edu.bu.cs665</groupId>
-	<artifactId>Example-1</artifactId>
+	<artifactId>Assignment-2</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Example-1</name>
+	<name>Assignment-2</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -49,7 +49,7 @@
 					<includeProjectDependencies>true</includeProjectDependencies>
 					<includePluginDependencies>true</includePluginDependencies>
 					<killAfter>-1</killAfter>
-					<mainClass>edu.bu.met.cs665.Main</mainClass>
+					<mainClass>edu.rice.cs.topK.prepareData.LoadAndPrepareData</mainClass>
 					<cleanupDaemonThreads>false</cleanupDaemonThreads>
 				</configuration>
 			</plugin>
@@ -58,7 +58,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>fully.qualified.MainClass</mainClass>
+							<mainClass>edu.bu.met.cs665.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -67,7 +67,25 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.0-M1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>${checkstyle.plugin.version}</version>
@@ -87,7 +105,7 @@
 					of "mvn checkstyle:checkstyle", but will not take effect on the execution 
 					of "mvn site" -->
 				<configuration>
-					<configLocation>config/google_checks.xml</configLocation>
+					<configLocation>config/checkstyle.xml</configLocation>
 					<failOnViolation>false</failOnViolation>
 				</configuration>
 			</plugin>
@@ -96,7 +114,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>3.0.5</version>
+				<version>3.0.4</version>
 				<configuration>
 					<!-- Enables analysis which takes more memory but finds more bugs. If 
 						you run out of memory, changes the value of the effort element to 'Low'. -->
@@ -138,14 +156,12 @@
 			<version>4.48-h-2</version>
 		</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-api</artifactId>
-    <version>5.3.0-M1</version>
-    <scope>test</scope>
-</dependency>
-
-
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.3.0-M1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
