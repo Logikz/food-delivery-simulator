@@ -7,4 +7,9 @@ public class Residence extends Structure {
   public Residence(Point location) {
     this.location = location;
   }
+
+  @Override
+  public String getMapCode() {
+    return "R";
+  }
 }

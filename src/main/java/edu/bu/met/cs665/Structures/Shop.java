@@ -23,4 +23,9 @@ public class Shop extends Structure{
         ", location=" + location +
         '}';
   }
+
+  @Override
+  public String getMapCode() {
+    return "S";
+  }
 }

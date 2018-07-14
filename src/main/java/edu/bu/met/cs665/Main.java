@@ -7,8 +7,11 @@ import edu.bu.met.cs665.Goods.HappyMeal;
 import edu.bu.met.cs665.Goods.Pizza;
 import edu.bu.met.cs665.Goods.RoseBouquet;
 import edu.bu.met.cs665.Goods.TVDinner;
+import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Payment.Order;
 import edu.bu.met.cs665.Structures.Shop;
+import edu.bu.met.cs665.Vehicles.Taxi;
+import edu.bu.met.cs665.Vehicles.Van;
 import edu.bu.met.cs665.Vehicles.Vehicle;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -40,26 +43,49 @@ public class Main {
    * @param args not used 
    */
   public static void main(String[] args) {
+    ObjectMap objectMap = new ObjectMap(MAP_WIDTH);
 
     List<Order> orders = generateRandomOrders(RANDOM.nextInt(30) + 20);
-    List<Shop> stores = generateRandomStores(5);
-    List<Vehicle> vehicles = generateRandomVehicles(10);
+    List<Shop> stores = generateRandomStores(5, objectMap);
+    List<Vehicle> vehicles = generateRandomVehicles(10, objectMap);
+
 
     System.out.println("Generated " + orders.size() + " orders");
     System.out.println(orders);
     System.out.println(stores);
+    System.out.println(vehicles);
+
+    DeliveryManager manager = new DeliveryManager(objectMap, vehicles, stores, orders);
+    manager.start();
   }
 
-  private static List<Vehicle> generateRandomVehicles(int numVehicles) {
-    return null;
+  private static List<Vehicle> generateRandomVehicles(int numVehicles, ObjectMap objectMap) {
+    List<Vehicle> vehicles = new ArrayList<>();
+    for(int i = 0; i < numVehicles; ++i){
+      Vehicle vehicle = null;
+      if(RANDOM.nextInt(2) == 0){
+        vehicle = new Taxi(null, generateUniquePoint(), objectMap, i);
+      } else {
+        if(RANDOM.nextInt(4) < 2){
+          vehicle = new Van(null, generateUniquePoint(), objectMap,true, i);
+        } else {
+          vehicle = new Van(null, generateUniquePoint(), objectMap,false, i);
+        }
+      }
+      vehicles.add(vehicle);
+      objectMap.getMap()[vehicle.getLocation().x][vehicle.getLocation().y].addObject(vehicle);
+    }
+    return vehicles;
   }
 
-  private static List<Shop> generateRandomStores(int numStores) {
+  private static List<Shop> generateRandomStores(int numStores,
+      ObjectMap objectMap) {
     List<Shop> stores = new ArrayList<>();
     LinkedList<Good> goods = new LinkedList<>(GOODS_LIST);
     for(int i = 0; i < numStores; ++i){
-
-      stores.add(new Shop(goods.pop(), generateUniquePoint()));
+      Shop shop = new Shop(goods.pop(), generateUniquePoint());
+      stores.add(shop);
+      objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
     }
     return stores;
   }

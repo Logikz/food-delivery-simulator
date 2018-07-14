@@ -1,43 +1,58 @@
 package edu.bu.met.cs665.Vehicles;
 
-import edu.bu.met.cs665.Goods.Chocolate;
-import edu.bu.met.cs665.Goods.Flowers;
 import edu.bu.met.cs665.Goods.FrozenMeal;
 import edu.bu.met.cs665.Goods.Good;
-import edu.bu.met.cs665.Goods.WarmMeal;
+import edu.bu.met.cs665.Map.Mappable;
 import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Mission.Idle;
-import edu.bu.met.cs665.Payment.Order;
 import edu.bu.met.cs665.Structures.Structure;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Van extends Vehicle {
+public class Van extends Vehicle implements Mappable {
 
-  Boolean hasFreezer;
+  private Boolean hasFreezer;
 
-  public Van(List<Good> goods, Order order, Point location, ObjectMap objectMap,
-      Structure destination, Boolean hasFreezer) {
+
+  public Van(List<Good> goods, Point location, ObjectMap objectMap, Boolean hasFreezer, int vehicleID) {
     this.goods = goods;
-    this.order = order;
     this.location = location;
     this.hasFreezer = hasFreezer;
     this.objectMap = objectMap;
     this.deliveryMission = new Idle();
-    this.destination = destination;
+    this.vehicleId = vehicleID;
   }
 
 
   @Override
-  public List<Class<? extends Good>> canStore() {
-    List<Class<? extends Good>> canStore = new ArrayList<>();
-    canStore.add(Flowers.class);
-    canStore.add(Chocolate.class);
-    canStore.add(WarmMeal.class);
-    if (hasFreezer) {
-      canStore.add(FrozenMeal.class);
+  protected void printStatus() {
+    Structure destination = this.deliveryMission.getNextDestination();
+    String destStr = "IDLE";
+    if(destination != null){
+      destStr = String.format("(%d, %d)", destination.getLocation().x, destination.getLocation().y);
     }
-    return canStore;
+    System.out.printf("Van(%d): (%d, %d) => %s Time Left: %d\n",
+        this.vehicleId, this.location.x, this.location.y,
+        destStr, this.deliveryMission.getTimeRemaining());
+  }
+
+  @Override
+  public Boolean canStore(Good good) {
+    if(good instanceof FrozenMeal){
+      return this.hasFreezer;
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return "Van{" +
+        "hasFreezer=" + hasFreezer +
+        '}';
+  }
+
+  @Override
+  public String getMapCode() {
+    return "V" + vehicleId;
   }
 }

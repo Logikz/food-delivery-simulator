@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Location {
   private Point point;
-  private List<Object> objects;
+  private List<Mappable> objects;
 
   public Location(Point point) {
     this.point = point;
@@ -17,15 +17,15 @@ public class Location {
     return point;
   }
 
-  public void addObject(Object object) {
+  public void addObject(Mappable object) {
     objects.add(object);
   }
 
-  public void removeObject(Object object){
+  public void removeObject(Mappable object){
     objects.remove(object);
   }
 
-  public List<Object> getObjects(){
+  public List<Mappable> getObjects(){
     return this.objects;
   }
 }

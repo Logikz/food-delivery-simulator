@@ -1,63 +1,71 @@
 package edu.bu.met.cs665.Vehicles;
 
 import edu.bu.met.cs665.Goods.Good;
+import edu.bu.met.cs665.Map.Mappable;
 import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Mission.DestinationMission;
 import edu.bu.met.cs665.Mission.Idle;
 import edu.bu.met.cs665.Mission.VehicleMission;
 import edu.bu.met.cs665.Payment.Order;
 import edu.bu.met.cs665.Payment.OrderStatus;
-import edu.bu.met.cs665.Structures.Residence;
 import edu.bu.met.cs665.Structures.Shop;
 import edu.bu.met.cs665.Structures.Structure;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
-public abstract class Vehicle implements Observer {
+public abstract class Vehicle extends Observable implements Mappable {
 
+  int vehicleId;
   List<Good> goods;
   Order order;
   Point location;
   ObjectMap objectMap;
   VehicleMission deliveryMission;
-  Structure destination;
 
-
-  @Override
-  public void update(Observable o, Object arg) {
-    if(arg instanceof Order){
-      this.order = (Order) arg;
-      this.deliveryMission = new DestinationMission(this.order.getDeliveryAddress());
-      this.order.setStatus(OrderStatus.IN_TRANSIT);
-    } else if(arg == null){
-      if(this.order.getDeliveryAddress().equals(this.location)){
-        // deliver the order
-        this.order.setStatus(OrderStatus.DELIVERED);
-        this.deliveryMission = new Idle();
-        //todo notify the manager order was delivered
-      } else if(destination.getLocation().equals(this.location)){
-        this.goods.add(((Shop) destination).getGood());
-
-        //figure out our next location
-        // if we have everything, move toward our delivery point
-        if(goods.equals(this.order.getGoods())){
-          this.destination = new Residence(this.order.getDeliveryAddress());
-          this.deliveryMission = new DestinationMission(this.destination.getLocation());
-        } else {
-          //find the closest shop to a good we need and move there.
-        }
-      }
-      else {
-        this.deliveryMission.move(this.location, this.objectMap);
-      }
-    }
+  public Point getLocation() {
+    return location;
   }
+
+  public void setOrder(Order order, List<Structure> destinations){
+    this.order = order;
+    this.deliveryMission = new DestinationMission(destinations);
+    this.order.setStatus(OrderStatus.IN_TRANSIT);
+    this.goods = new ArrayList<>();
+  }
+
+
+  public void tick() {
+    if(this.order != null && this.order.getDeliveryAddress().equals(this.location)){
+      // deliver the order
+      this.order.setStatus(OrderStatus.DELIVERED);
+      this.deliveryMission = new Idle();
+      this.order = null;
+    } else if(this.deliveryMission instanceof DestinationMission &&
+        this.deliveryMission.getNextDestination().getLocation().equals(this.location)){
+      this.goods.add(((Shop) this.deliveryMission.getNextDestination()).getGood());
+      this.deliveryMission.popDestination();
+    }
+    else {
+      Point newLocation = this.deliveryMission.move(this.location, this.objectMap);
+      Point oldLocation = this.location;
+      this.location = newLocation;
+      setChanged();
+      notifyObservers(oldLocation);
+    }
+    printStatus();
+  }
+
+  protected abstract void printStatus();
+
   /**
    * List of goods the vehicle can store, some have freezers which can hold cold items
    * @return List of goods this vehicle can store
    */
-  abstract List<Class<? extends Good>> canStore();
+  public abstract Boolean canStore(Good good);
 
+  public boolean hasOrder() {
+    return this.order != null;
+  }
 }
