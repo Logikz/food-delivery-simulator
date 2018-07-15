@@ -7,9 +7,15 @@ import edu.bu.met.cs665.Goods.HappyMeal;
 import edu.bu.met.cs665.Goods.Pizza;
 import edu.bu.met.cs665.Goods.RoseBouquet;
 import edu.bu.met.cs665.Goods.TVDinner;
+import edu.bu.met.cs665.Map.ConsoleMap;
 import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Payment.Order;
+import edu.bu.met.cs665.Structures.ChocolateBoxShop;
+import edu.bu.met.cs665.Structures.HappyMealShop;
+import edu.bu.met.cs665.Structures.PizzaShop;
+import edu.bu.met.cs665.Structures.RoseBouquetShop;
 import edu.bu.met.cs665.Structures.Shop;
+import edu.bu.met.cs665.Structures.TVDinnerShop;
 import edu.bu.met.cs665.Vehicles.Taxi;
 import edu.bu.met.cs665.Vehicles.Van;
 import edu.bu.met.cs665.Vehicles.Vehicle;
@@ -23,8 +29,8 @@ import java.util.Random;
 public class Main {
   private static final Random RANDOM = new Random();
   private static final List<Good> GOODS_LIST = createGoods();
-  private static final int MAP_WIDTH = 10;
-  private static final int MAP_HEIGHT = 10;
+  private static final int MAP_WIDTH = 8;
+  private static final int MAP_HEIGHT = 8;
   private static final List<Point> POINTS = new ArrayList<>();
 
   private static List<Good> createGoods() {
@@ -50,28 +56,33 @@ public class Main {
     List<Vehicle> vehicles = generateRandomVehicles(10, objectMap);
 
 
-    System.out.println("Generated " + orders.size() + " orders");
-    System.out.println(orders);
-    System.out.println(stores);
-    System.out.println(vehicles);
+    System.out.println("Generated " + orders.size() + " orders\n\n");
 
-    DeliveryManager manager = new DeliveryManager(objectMap, vehicles, stores, orders);
+    DeliveryManager manager = new DeliveryManager(objectMap, vehicles, stores, orders, new ConsoleMap());
     manager.start();
   }
 
   private static List<Vehicle> generateRandomVehicles(int numVehicles, ObjectMap objectMap) {
     List<Vehicle> vehicles = new ArrayList<>();
+    boolean atLeastOneFreezer = false;
     for(int i = 0; i < numVehicles; ++i){
-      Vehicle vehicle = null;
+      Vehicle vehicle;
       if(RANDOM.nextInt(2) == 0){
         vehicle = new Taxi(null, generateUniquePoint(), objectMap, i);
       } else {
         if(RANDOM.nextInt(4) < 2){
           vehicle = new Van(null, generateUniquePoint(), objectMap,true, i);
+          atLeastOneFreezer = true;
         } else {
           vehicle = new Van(null, generateUniquePoint(), objectMap,false, i);
         }
       }
+      vehicles.add(vehicle);
+
+    }
+
+    if(!atLeastOneFreezer){
+      Vehicle vehicle = new Van(null, generateUniquePoint(), objectMap, true, numVehicles + 1);
       vehicles.add(vehicle);
       objectMap.getMap()[vehicle.getLocation().x][vehicle.getLocation().y].addObject(vehicle);
     }
@@ -82,11 +93,32 @@ public class Main {
       ObjectMap objectMap) {
     List<Shop> stores = new ArrayList<>();
     LinkedList<Good> goods = new LinkedList<>(GOODS_LIST);
-    for(int i = 0; i < numStores; ++i){
-      Shop shop = new Shop(goods.pop(), generateUniquePoint());
-      stores.add(shop);
-      objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
-    }
+
+    Shop shop = new PizzaShop(generateUniquePoint());
+
+    stores.add(shop);
+    objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
+
+    shop = new ChocolateBoxShop(generateUniquePoint());
+
+    stores.add(shop);
+    objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
+
+    shop = new HappyMealShop(generateUniquePoint());
+
+    stores.add(shop);
+    objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
+
+    shop = new RoseBouquetShop(generateUniquePoint());
+
+    stores.add(shop);
+    objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
+
+    shop = new TVDinnerShop(generateUniquePoint());
+
+    stores.add(shop);
+    objectMap.getMap()[shop.getLocation().x][shop.getLocation().y].addObject(shop);
+
     return stores;
   }
 
@@ -102,18 +134,20 @@ public class Main {
         orderedGoods.add(goods.pop());
       }
 
-      Boolean birthday = RANDOM.nextBoolean();
-      if(birthday){
-        if(!orderedGoods.stream().anyMatch(good -> good instanceof ChocolateBox)){
+      int birthday = RANDOM.nextInt(5);
+      if(birthday < 2){
+        if(orderedGoods.stream().noneMatch(good -> good instanceof ChocolateBox)){
           orderedGoods.add(new ChocolateBox());
         }
-        if(!orderedGoods.stream().anyMatch(good -> good instanceof Flowers)){
+        if(orderedGoods.stream().noneMatch(good -> good instanceof Flowers)){
           orderedGoods.add(new RoseBouquet());
         }
       }
       Point point = generateUniquePoint();
 
-      orders.add(new Order(goods, point));
+      Order order = new Order(goods, point);
+      orders.add(order);
+      System.out.printf("%s contents: %s\n", order.getOrderId(), goods);
     }
 
     return orders;

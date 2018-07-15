@@ -1,5 +1,8 @@
 package edu.bu.met.cs665.Goods;
 
-public abstract class Food extends Good{
+/**
+ * Class to cover food
+ */
+abstract class Food extends Good{
 
 }

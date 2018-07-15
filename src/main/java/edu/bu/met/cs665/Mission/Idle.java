@@ -2,16 +2,28 @@ package edu.bu.met.cs665.Mission;
 
 import edu.bu.met.cs665.Map.ObjectMap;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
+/**
+ * An implementation of a strategy to idle when the vehicle doesn't have any goods.
+ */
 public class Idle extends VehicleMission {
 
+  /**
+   * Constructor
+   */
   public Idle() {
     this.timeRemaining = 0;
-    this.destinations = new ArrayList<>();
+    this.destinations = new Stack<>();
   }
 
+  /**
+   * Moves randomly to simulate a car driving around
+   * @param location Not used
+   * @param objectMap Not used
+   * @return A new location to move to
+   */
   @Override
   public Point move(Point location, ObjectMap objectMap) {
     // move a random direction

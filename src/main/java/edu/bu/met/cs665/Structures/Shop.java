@@ -3,29 +3,28 @@ package edu.bu.met.cs665.Structures;
 import edu.bu.met.cs665.Goods.Good;
 import java.awt.Point;
 
-public class Shop extends Structure{
-  private Good good;
+/**
+ * A shop can provide at most one kind of good for delivery.
+ */
+public abstract class Shop extends Structure{
 
-  public Shop(Good good, Point location) {
-    this.good = good;
+  /**
+   * Constructor
+   * @param location Location of the shop
+   */
+  public Shop(Point location) {
     this.location = location;
   }
 
-  public Good getGood() {
-    return good;
-  }
-
-
-  @Override
-  public String toString() {
-    return "Shop{" +
-        "good=" + good +
-        ", location=" + location +
-        '}';
-  }
+  /**
+   * Returns the good this shop provides
+   * @return A new good
+   */
+  public abstract Good getGood();
 
   @Override
-  public String getMapCode() {
-    return "S";
-  }
+  public abstract String toString();
+
+  @Override
+  public abstract String getMapCode();
 }
