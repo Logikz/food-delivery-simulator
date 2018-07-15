@@ -87,6 +87,10 @@ public abstract class Vehicle extends Observable implements Mappable {
    */
   public abstract Boolean canStore(Good good);
 
+  public List<Good> getGoods() {
+    return goods;
+  }
+
   public boolean hasOrder() {
     return this.order != null;
   }

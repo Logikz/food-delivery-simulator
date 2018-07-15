@@ -7,7 +7,7 @@ import edu.bu.met.cs665.Goods.HappyMeal;
 import edu.bu.met.cs665.Goods.Pizza;
 import edu.bu.met.cs665.Goods.RoseBouquet;
 import edu.bu.met.cs665.Goods.TVDinner;
-import edu.bu.met.cs665.Map.ConsoleMap;
+import edu.bu.met.cs665.Map.ConsoleRushHourStrategy;
 import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Payment.Order;
 import edu.bu.met.cs665.Structures.ChocolateBoxShop;
@@ -58,7 +58,7 @@ public class Main {
 
     System.out.println("Generated " + orders.size() + " orders\n\n");
 
-    DeliveryManager manager = new DeliveryManager(objectMap, vehicles, stores, orders, new ConsoleMap());
+    DeliveryManager manager = new DeliveryManager(objectMap, vehicles, stores, orders, new ConsoleRushHourStrategy());
     manager.start();
   }
 

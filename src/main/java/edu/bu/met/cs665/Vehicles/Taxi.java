@@ -66,4 +66,6 @@ public class Taxi extends Vehicle implements Mappable {
   public String getMapCode() {
     return "T" + vehicleId;
   }
+
+
 }
