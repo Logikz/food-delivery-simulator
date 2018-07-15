@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,7 @@ public class DeliveryManager implements Observer {
   void start(){
     int tickCount = 0;
     boolean startRushHour = false;
+    boolean shouldFinish = false;
     while(!orders.isEmpty()){
       try {
         // Check if we need to go into or come out of 'rush hour'
@@ -83,6 +85,15 @@ public class DeliveryManager implements Observer {
         printMap(objectMap);
         ++tickCount;
         Thread.sleep(50);
+        if(!shouldFinish) {
+          Scanner scanner = new Scanner(System.in);
+          System.out
+              .println("Hit enter for the next tick, or 'c' to continue running the whole program");
+          String s = scanner.nextLine();
+          if (s != null && s.toLowerCase().equals("c")) {
+            shouldFinish = true;
+          }
+        }
       } catch (InterruptedException e) {
         System.err.println(e.getMessage());
       }
