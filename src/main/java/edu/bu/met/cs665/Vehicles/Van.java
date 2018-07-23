@@ -2,7 +2,6 @@ package edu.bu.met.cs665.Vehicles;
 
 import edu.bu.met.cs665.Goods.FrozenMeal;
 import edu.bu.met.cs665.Goods.Good;
-import edu.bu.met.cs665.Map.Mappable;
 import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Mission.Idle;
 import edu.bu.met.cs665.Structures.Structure;
@@ -13,7 +12,7 @@ import java.util.List;
  * Class to capture a van transportation vehicle.  Vans can sometimes have freezers which gives them
  * the ability to transport frozen items at any distance.
  */
-public class Van extends Vehicle implements Mappable {
+public class Van extends Vehicle {
 
   private Boolean hasFreezer;
 

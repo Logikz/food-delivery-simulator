@@ -25,6 +25,10 @@ the order is assigned to the driver.
 - New orders aren't received during execution of the program
 
 # Implementation Description
+The main focus of the assignment was deriving the right patters around notifying order updates and 
+assigning orders in various conditions for a food delivery app.  I generated random data for each
+execution cycle in the main, I considered making it fed in by console input or modifiable via a configuration
+file.  As this wasn't really the focus of the assignment to create different scenarios, I left it as is.
 
 There are many software design patterns that can be used to implement a system designed around
 notifications and asynchronous events.  In this assignment we use the observer pattern to monitor orders

@@ -2,7 +2,6 @@ package edu.bu.met.cs665.Vehicles;
 
 import edu.bu.met.cs665.Goods.FrozenMeal;
 import edu.bu.met.cs665.Goods.Good;
-import edu.bu.met.cs665.Map.Mappable;
 import edu.bu.met.cs665.Map.ObjectMap;
 import edu.bu.met.cs665.Mission.Idle;
 import edu.bu.met.cs665.Structures.Structure;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * Class to capture a taxi transportation vehicle.
  */
-public class Taxi extends Vehicle implements Mappable {
+public class Taxi extends Vehicle {
 
   /**
    * Constructor
